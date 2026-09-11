@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="BLITZ">
+  <title>BLITZ · VIC-20 remake</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    :root{color-scheme:dark;--magenta:#cf00d8;--red:#cf0000;--line:#7d4300}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;width:100%;height:100%;background:#000;color:#fff;font-family:"Courier New",monospace;overflow:hidden}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+    #shell{position:relative;width:min(100vw,calc((100dvh - 52px)*4/3));max-width:960px;aspect-ratio:4/3;background:#000;overflow:hidden;box-shadow:0 0 0 1px #151515}
+    #project{width:100%;height:100%;background:#000;touch-action:none;user-select:none}
+    #loading,#gate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:20;text-align:center;background:#000}
+    #loading{color:var(--magenta);font-weight:700;letter-spacing:.08em}
+    #gate{display:none;background:rgba(0,0,0,.12);align-items:flex-end;padding:0 0 3.5%}
+    #play{appearance:none;border:2px solid #7d4300;background:#cf0000;color:white;font:700 clamp(15px,3.3vw,27px)/1 "Courier New",monospace;padding:.55em 1.7em;min-width:58%;cursor:pointer;box-shadow:0 0 0 2px #000;letter-spacing:.03em}
+    #play:active{transform:translateY(1px)}
+    #toolbar{height:46px;width:min(100vw,960px);display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 10px}
+    .tool{appearance:none;border:1px solid #353535;background:#090909;color:#d7d7d7;border-radius:8px;font:700 13px/1 "Courier New",monospace;padding:8px 12px;cursor:pointer}
+    .tool:active{background:#191919}
+    #hint{color:#777;font-size:11px;white-space:nowrap}
+    dialog{border:1px solid #444;background:#080808;color:#eee;max-width:560px;width:calc(100% - 28px);padding:22px;border-radius:12px;font-family:Arial,sans-serif;line-height:1.45}
+    dialog::backdrop{background:rgba(0,0,0,.78)}
+    dialog h2{margin:.1em 0 .6em;color:#d000d8;font-family:"Courier New",monospace}
+    dialog p{margin:.6em 0}
+    dialog .close{float:right;background:#222;color:white;border:1px solid #555;border-radius:7px;padding:7px 11px;cursor:pointer}
+    @media (pointer:coarse){#hint{display:none}.tool{font-size:12px;padding:8px 10px}}
+    @media (max-height:480px){#toolbar{position:absolute;right:4px;bottom:4px;width:auto;height:auto;z-index:15;background:rgba(0,0,0,.5);border-radius:10px}#hint{display:none}.tool{padding:7px 9px}#shell{width:min(100vw,calc(100dvh*4/3));max-height:100dvh}}
+  </style>
+</head>
+<body>
+  <main id="shell" aria-label="BLITZ">
+    <div id="project"></div>
+    <div id="loading">CARICAMENTO BLITZ…</div>
+    <div id="gate"><button id="play" type="button">F1 · PLAY</button></div>
+  </main>
+  <nav id="toolbar" aria-label="Comandi">
+    <button class="tool" id="restart" type="button">↻ RIPARTI</button>
+    <button class="tool" id="fullscreen" type="button">⛶ SCHERMO INTERO</button>
+    <button class="tool" id="info" type="button">ⓘ INFO</button>
+    <span id="hint">SPAZIO / CLICK = BOMBA</span>
+  </nav>
+
+  <dialog id="about">
+    <button class="close" id="closeInfo" type="button">CHIUDI</button>
+    <h2>BLITZ</h2>
+    <p>Rivivi le emozioni dei primi giochi per home computer! Blitz è stato uno dei primi giochi del VIC-20.</p>
+    <p>Il gioco originale è stato programmato da Simon Taylor e Steve Battle e pubblicato per Commodore VIC-20 nel 1982.</p>
+    <p>Questa versione è una riprogrammazione realizzata da zero in Scratch: sprite ridisegnati e suoni registrati dall'originale.</p>
+    <p><strong>Comandi:</strong> SPAZIO oppure click/tap per sganciare la bomba.</p>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@turbowarp/scaffolding@0.4.0/dist/scaffolding-min.js"></script>
+  <script>
+  (() => {
+    'use strict';
+    const BEST_KEY = 'blitz-vic20-best-v1';
+    const projectEl = document.getElementById('project');
+    const loading = document.getElementById('loading');
+    const gate = document.getElementById('gate');
+    const play = document.getElementById('play');
+    const restart = document.getElementById('restart');
+    const fullscreen = document.getElementById('fullscreen');
+    const about = document.getElementById('about');
+    let scaffolding = null;
+    let ready = false;
+    let started = false;
+    let bestVariable = null;
+    let bestTimer = null;
+
+    async function loadGame() {
+      try {
+        scaffolding = new Scaffolding.Scaffolding();
+        scaffolding.width = 480;
+        scaffolding.height = 360;
+        scaffolding.resizeMode = 'preserve-ratio';
+        scaffolding.editableLists = false;
+        scaffolding.shouldConnectPeripherals = true;
+        scaffolding.usePackagedRuntime = false;
+        scaffolding.setup();
+        scaffolding.appendTo(projectEl);
+
+        const response = await fetch('blitz.sb3');
+        if (!response.ok) throw new Error('Impossibile caricare blitz.sb3');
+        const project = await response.arrayBuffer();
+        await scaffolding.loadProject(project);
+        installBestPersistence();
+        ready = true;
+        loading.style.display = 'none';
+        gate.style.display = 'flex';
+        scaffolding.relayout();
+      } catch (err) {
+        console.error(err);
+        loading.textContent = 'ERRORE DI CARICAMENTO';
+        loading.style.color = '#ff4040';
+      }
+    }
+
+    function installBestPersistence() {
+      try {
+        const stage = scaffolding.vm.runtime.getTargetForStage();
+        bestVariable = Object.values(stage.variables).find(v => v.name === '☁ BEST');
+        if (!bestVariable) return;
+        const saved = Number(localStorage.getItem(BEST_KEY));
+        const current = Number(bestVariable.value) || 0;
+        if (Number.isFinite(saved) && saved > current) bestVariable.value = saved;
+        if (bestTimer) clearInterval(bestTimer);
+        bestTimer = setInterval(() => {
+          const value = Number(bestVariable.value);
+          if (Number.isFinite(value)) {
+            const old = Number(localStorage.getItem(BEST_KEY)) || 0;
+            if (value > old) localStorage.setItem(BEST_KEY, String(value));
+          }
+        }, 500);
+      } catch (e) {
+        console.warn('BEST locale non disponibile', e);
+      }
+    }
+
+    function unlockAudio() {
+      try {
+        const ctx = scaffolding?.vm?.runtime?.audioEngine?.audioContext;
+        if (ctx && ctx.state !== 'running') ctx.resume();
+      } catch (_) {}
+    }
+
+    function startGame() {
+      if (!ready) return;
+      unlockAudio();
+      scaffolding.stopAll();
+      scaffolding.greenFlag();
+      started = true;
+      gate.style.display = 'none';
+      projectEl.focus?.();
+    }
+
+    play.addEventListener('click', startGame);
+    restart.addEventListener('click', startGame);
+
+    window.addEventListener('keydown', (ev) => {
+      if (ev.key === 'F1') {
+        ev.preventDefault();
+        startGame();
+      }
+    }, {capture:true});
+
+    fullscreen.addEventListener('click', async () => {
+      try {
+        if (!document.fullscreenElement) {
+          await document.documentElement.requestFullscreen();
+        } else {
+          await document.exitFullscreen();
+        }
+        setTimeout(() => scaffolding?.relayout(), 120);
+      } catch (_) {}
+    });
+
+    document.getElementById('info').addEventListener('click', () => about.showModal());
+    document.getElementById('closeInfo').addEventListener('click', () => about.close());
+    about.addEventListener('click', (e) => {
+      const r = about.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) about.close();
+    });
+
+    window.addEventListener('resize', () => scaffolding?.relayout());
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(console.warn));
+    }
+
+    loadGame();
+  })();
+  </script>
+</body>
+</html>
