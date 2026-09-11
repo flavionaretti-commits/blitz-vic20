@@ -1,6 +1,11 @@
+THIRD-PARTY NOTICES
+===================
+
 TurboWarp Scaffolding
 https://github.com/TurboWarp/scaffolding
 License: Mozilla Public License 2.0 (MPL-2.0)
 
-BLITZ original game: programmed by Simon Taylor and Steve Battle, Commodore VIC-20, 1982.
-This repository contains a fan remake/reimplementation and is not affiliated with Commodore or the original authors/publisher.
+BLITZ original game
+Original Commodore VIC-20 game (1982), programmed by Simon Taylor and Steve Battle.
+
+This webapp is an independent fan remake/reimplementation. It is not affiliated with Commodore, the original programmers, or the original publisher. Rights in the original game, title, audiovisual material and other pre-existing elements remain with their respective rights holders.

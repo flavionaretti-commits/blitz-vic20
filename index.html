@@ -4,11 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#000000">
+  <meta name="author" content="Flavio Naretti">
+  <meta name="description" content="BLITZ per VIC-20: riprogrammazione da zero in Scratch realizzata da Flavio Naretti, ispirata al gioco originale del 1982 di Simon Taylor e Steve Battle.">
+  <meta property="og:title" content="BLITZ · VIC-20 remake">
+  <meta property="og:description" content="Riprogrammazione da zero in Scratch realizzata da Flavio Naretti. Rivivi uno dei primi giochi per Commodore VIC-20.">
+  <meta property="og:type" content="website">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="BLITZ">
-  <title>BLITZ · VIC-20 remake</title>
+  <title>BLITZ · VIC-20 remake · Flavio Naretti</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -21,17 +26,25 @@
     #project{width:100%;height:100%;background:#000;touch-action:none;user-select:none}
     #loading,#gate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:20;text-align:center;background:#000}
     #loading{color:var(--magenta);font-weight:700;letter-spacing:.08em}
-    #gate{display:none;background:rgba(0,0,0,.12);align-items:flex-end;padding:0 0 3.5%}
+    #gate{display:none;background:rgba(0,0,0,.18);align-items:flex-end;padding:0 0 3.2%;cursor:pointer}
+    #gateBox{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(92%,620px)}
+    #startHelp{margin:0;color:#fff;background:rgba(0,0,0,.72);padding:8px 12px;border:1px solid #333;font:700 clamp(11px,2.35vw,16px)/1.35 "Courier New",monospace;text-shadow:0 1px 0 #000}
     #play{appearance:none;border:2px solid #7d4300;background:#cf0000;color:white;font:700 clamp(15px,3.3vw,27px)/1 "Courier New",monospace;padding:.55em 1.7em;min-width:58%;cursor:pointer;box-shadow:0 0 0 2px #000;letter-spacing:.03em}
+    #authorTag{color:#999;font:700 clamp(9px,1.9vw,12px)/1.2 "Courier New",monospace;background:rgba(0,0,0,.62);padding:4px 8px}
     #play:active{transform:translateY(1px)}
     #toolbar{height:46px;width:min(100vw,960px);display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 10px}
     .tool{appearance:none;border:1px solid #353535;background:#090909;color:#d7d7d7;border-radius:8px;font:700 13px/1 "Courier New",monospace;padding:8px 12px;cursor:pointer}
     .tool:active{background:#191919}
     #hint{color:#777;font-size:11px;white-space:nowrap}
-    dialog{border:1px solid #444;background:#080808;color:#eee;max-width:560px;width:calc(100% - 28px);padding:22px;border-radius:12px;font-family:Arial,sans-serif;line-height:1.45}
+    dialog{border:1px solid #444;background:#080808;color:#eee;max-width:680px;width:calc(100% - 28px);max-height:min(86dvh,760px);overflow:auto;padding:22px;border-radius:12px;font-family:Arial,sans-serif;line-height:1.48}
     dialog::backdrop{background:rgba(0,0,0,.78)}
     dialog h2{margin:.1em 0 .6em;color:#d000d8;font-family:"Courier New",monospace}
+    dialog h3{margin:1.15em 0 .35em;color:#fff;font-family:"Courier New",monospace;font-size:1em;border-bottom:1px solid #333;padding-bottom:.25em}
     dialog p{margin:.6em 0}
+    dialog ul{margin:.45em 0 .75em;padding-left:1.3em}
+    .author{font-size:1.08em;border:1px solid #3d3d3d;background:#111;padding:12px 14px;border-radius:8px}
+    .legal{font-size:.92em;color:#cfcfcf;background:#0d0d0d;border-left:3px solid #7d4300;padding:9px 11px}
+    .small{font-size:.84em;color:#999}
     dialog .close{float:right;background:#222;color:white;border:1px solid #555;border-radius:7px;padding:7px 11px;cursor:pointer}
     @media (pointer:coarse){#hint{display:none}.tool{font-size:12px;padding:8px 10px}}
     @media (max-height:480px){#toolbar{position:absolute;right:4px;bottom:4px;width:auto;height:auto;z-index:15;background:rgba(0,0,0,.5);border-radius:10px}#hint{display:none}.tool{padding:7px 9px}#shell{width:min(100vw,calc(100dvh*4/3));max-height:100dvh}}
@@ -41,22 +54,48 @@
   <main id="shell" aria-label="BLITZ">
     <div id="project"></div>
     <div id="loading">CARICAMENTO BLITZ…</div>
-    <div id="gate"><button id="play" type="button">F1 · PLAY</button></div>
+    <div id="gate" aria-label="Avvia BLITZ">
+      <div id="gateBox">
+        <p id="startHelp">CLICCA / TOCCA LO SCHERMO PER GIOCARE<br><span style="font-weight:400">oppure premi F1 · poi attendi qualche secondo</span></p>
+        <button id="play" type="button">F1 · PLAY</button>
+        <div id="authorTag">REMAKE SCRATCH · FLAVIO NARETTI</div>
+      </div>
+    </div>
   </main>
   <nav id="toolbar" aria-label="Comandi">
     <button class="tool" id="restart" type="button">↻ RIPARTI</button>
     <button class="tool" id="fullscreen" type="button">⛶ SCHERMO INTERO</button>
-    <button class="tool" id="info" type="button">ⓘ INFO</button>
+    <button class="tool" id="info" type="button">ⓘ INFO & CREDITI</button>
     <span id="hint">SPAZIO / CLICK = BOMBA</span>
   </nav>
 
   <dialog id="about">
     <button class="close" id="closeInfo" type="button">CHIUDI</button>
-    <h2>BLITZ</h2>
-    <p>Rivivi le emozioni dei primi giochi per home computer! Blitz è stato uno dei primi giochi del VIC-20.</p>
-    <p>Il gioco originale è stato programmato da Simon Taylor e Steve Battle e pubblicato per Commodore VIC-20 nel 1982.</p>
-    <p>Questa versione è una riprogrammazione realizzata da zero in Scratch: sprite ridisegnati e suoni registrati dall'originale.</p>
-    <p><strong>Comandi:</strong> SPAZIO oppure click/tap per sganciare la bomba.</p>
+    <h2>BLITZ · VIC-20 REMAKE</h2>
+
+    <h3>COME SI GIOCA</h3>
+    <p>La schermata iniziale riproduce volutamente l'indicazione vintage <strong>“PRESS F1”</strong> del gioco originale.</p>
+    <ul>
+      <li>Per iniziare nella webapp basta <strong>cliccare o toccare lo schermo</strong> (oppure premere davvero <strong>F1</strong> su una tastiera).</li>
+      <li>Dopo l'avvio <strong>attendi qualche secondo</strong> mentre parte la sequenza iniziale.</li>
+      <li>Durante la partita usa <strong>SPAZIO</strong> oppure <strong>click/tap</strong> per sganciare la bomba.</li>
+      <li><strong>RIPARTI</strong> riavvia la partita; <strong>SCHERMO INTERO</strong> attiva il fullscreen.</li>
+    </ul>
+
+    <h3>IL PROGETTO</h3>
+    <p>Rivivi le emozioni dei primi giochi per home computer! <strong>BLITZ</strong> è uno dei giochi storici associati al Commodore VIC-20.</p>
+    <p>Questa versione è stata <strong>riprogrammata da zero in Scratch</strong> dopo aver studiato e rigiocato l'originale, cercando di riprodurne il più fedelmente possibile comportamento, grafica e atmosfera sonora.</p>
+
+    <h3>CREDITI</h3>
+    <p class="author"><strong>Riprogrammazione Scratch, ricostruzione tecnica e sprite ridisegnati:</strong><br><strong>Flavio Naretti</strong><br><span class="small">2026</span></p>
+    <p><strong>Acquisizione, montaggio e integrazione dei suoni:</strong> Flavio Naretti, a partire dall'audio del gioco originale.</p>
+    <p><strong>Gioco originale per Commodore VIC-20 (1982):</strong> programmato da <strong>Simon Taylor</strong> e <strong>Steve Battle</strong>.</p>
+    <p><strong>Runtime web:</strong> TurboWarp Scaffolding, distribuito con licenza Mozilla Public License 2.0 (MPL-2.0).</p>
+
+    <h3>NOTE LEGALI E ATTRIBUZIONE</h3>
+    <p class="legal"><strong>© 2026 Flavio Naretti.</strong> Tutti i diritti riservati sulle parti originali di questa specifica ricostruzione: codice e logica di programmazione Scratch, organizzazione del progetto e sprite ridisegnati.</p>
+    <p class="legal">È consentito <strong>giocare gratuitamente e condividere il link</strong> a questa webapp. Non è autorizzato rimuovere o alterare l'attribuzione a Flavio Naretti, né presentare questa specifica riprogrammazione come opera propria. Nessuna ulteriore licenza di riuso, modifica o redistribuzione delle parti originali della ricostruzione è concessa, salvo i diritti previsti dalle licenze dei componenti di terze parti e dalle funzionalità della piattaforma che ospita il repository.</p>
+    <p class="legal">Il concept, il titolo BLITZ e gli elementi derivati dal gioco originale non vengono rivendicati come proprietà dell'autore di questa riprogrammazione e restano ai rispettivi aventi diritto. Questo progetto è un remake amatoriale indipendente e non è affiliato con Commodore né con gli autori o gli editori dell'opera originale.</p>
   </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/@turbowarp/scaffolding@0.4.0/dist/scaffolding-min.js"></script>
@@ -143,7 +182,7 @@
       projectEl.focus?.();
     }
 
-    play.addEventListener('click', startGame);
+    gate.addEventListener('click', startGame);
     restart.addEventListener('click', startGame);
 
     window.addEventListener('keydown', (ev) => {

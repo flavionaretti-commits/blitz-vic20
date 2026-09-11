@@ -1,7 +1,7 @@
 {
   "name": "BLITZ · VIC-20 remake",
   "short_name": "BLITZ",
-  "description": "Remake di BLITZ per Commodore VIC-20, riprogrammato in Scratch.",
+  "description": "BLITZ per Commodore VIC-20: riprogrammazione da zero in Scratch realizzata da Flavio Naretti.",
   "id": "./",
   "start_url": "./",
   "scope": "./",

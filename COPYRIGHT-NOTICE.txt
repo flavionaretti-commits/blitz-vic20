@@ -1,0 +1,17 @@
+BLITZ · VIC-20 REMAKE — COPYRIGHT AND ATTRIBUTION NOTICE
+=========================================================
+
+Scratch remake / reimplementation by Flavio Naretti
+Copyright © 2026 Flavio Naretti
+
+All rights reserved in the original contributions created for this specific remake, including the Scratch code and programming logic, project organization, and redrawn sprites.
+
+You may play the webapp free of charge and share the public link to it. You may not remove or alter the attribution to Flavio Naretti or present this specific reimplementation as your own work. No additional license to reuse, modify, republish or redistribute the original contributions is granted, except for rights arising from third-party licenses and the normal functionality/terms of the hosting platform.
+
+Audio used in the remake was captured, edited and integrated by Flavio Naretti from the original game. No ownership is claimed over pre-existing audio or other elements originating from the 1982 game.
+
+Original game: BLITZ for Commodore VIC-20 (1982), programmed by Simon Taylor and Steve Battle. Rights in the original game, title and pre-existing elements remain with their respective rights holders.
+
+This is an independent fan remake and is not affiliated with Commodore, the original programmers, or the original publisher.
+
+Third-party runtime: TurboWarp Scaffolding, Mozilla Public License 2.0 (MPL-2.0).
