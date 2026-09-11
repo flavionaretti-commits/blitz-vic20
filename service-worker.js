@@ -1,4 +1,4 @@
-const CACHE = 'blitz-vic20-v3';
+const CACHE = 'blitz-vic20-v4';
 const LOCAL = [
   './', './index.html', './blitz.sb3', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'
