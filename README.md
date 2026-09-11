@@ -13,7 +13,7 @@ La schermata del gioco mantiene volutamente la storica indicazione **PRESS F1**.
 
 ## Crediti
 
-- **Riprogrammazione Scratch, ricostruzione tecnica e sprite ridisegnati:** Flavio Naretti, 2026
+- **Riprogrammazione Scratch, ricostruzione tecnica e sprite ridisegnati:** Flavio Naretti — prima pubblicazione su Scratch nel 2020
 - **Acquisizione, montaggio e integrazione dei suoni:** Flavio Naretti, a partire dall'audio del gioco originale
 - **Gioco originale per Commodore VIC-20 (1982):** Simon Taylor e Steve Battle
 - **Runtime web:** TurboWarp Scaffolding (MPL-2.0)
@@ -22,7 +22,7 @@ Vedi anche `COPYRIGHT-NOTICE.txt` e `THIRD-PARTY-NOTICES.txt`.
 
 ## Attribuzione e riuso
 
-© 2026 Flavio Naretti. Tutti i diritti riservati sulle parti originali della presente ricostruzione, in particolare codice e logica Scratch, organizzazione del progetto e sprite ridisegnati.
+© 2020–2026 Flavio Naretti. Tutti i diritti riservati sulle parti originali della presente ricostruzione, in particolare codice e logica Scratch, organizzazione del progetto e sprite ridisegnati.
 
 È consentito giocare gratuitamente e condividere il link alla webapp. Non è autorizzato rimuovere o alterare l'attribuzione all'autore, né presentare questa specifica riprogrammazione come opera propria. I diritti sul gioco originale e sugli elementi derivati restano ai rispettivi aventi diritto.
 

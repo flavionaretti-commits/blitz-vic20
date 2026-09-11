@@ -2,7 +2,7 @@ BLITZ · VIC-20 REMAKE — COPYRIGHT AND ATTRIBUTION NOTICE
 =========================================================
 
 Scratch remake / reimplementation by Flavio Naretti
-Copyright © 2026 Flavio Naretti
+Copyright © 2020–2026 Flavio Naretti
 
 All rights reserved in the original contributions created for this specific remake, including the Scratch code and programming logic, project organization, and redrawn sprites.
 
