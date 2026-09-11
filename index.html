@@ -26,11 +26,9 @@
     #project{width:100%;height:100%;background:#000;touch-action:none;user-select:none}
     #loading,#gate{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:20;text-align:center;background:#000}
     #loading{color:var(--magenta);font-weight:700;letter-spacing:.08em}
-    #gate{display:none;background:rgba(0,0,0,.18);align-items:flex-end;padding:0 0 3.2%;cursor:pointer}
+    #gate{display:none;background:transparent;align-items:flex-end;padding:0 0 3.2%;cursor:pointer}
     #gateBox{display:flex;flex-direction:column;align-items:center;gap:8px;width:min(92%,620px)}
-    #play{appearance:none;border:2px solid #7d4300;background:#cf0000;color:white;font:700 clamp(15px,3.3vw,27px)/1 "Courier New",monospace;padding:.55em 1.7em;min-width:58%;cursor:pointer;box-shadow:0 0 0 2px #000;letter-spacing:.03em}
     #authorTag{color:#999;font:700 clamp(9px,1.9vw,12px)/1.2 "Courier New",monospace;background:rgba(0,0,0,.62);padding:4px 8px}
-    #play:active{transform:translateY(1px)}
     #toolbar{height:46px;width:min(100vw,960px);display:flex;align-items:center;justify-content:center;gap:10px;padding:6px 10px}
     .tool{appearance:none;border:1px solid #353535;background:#090909;color:#d7d7d7;border-radius:8px;font:700 13px/1 "Courier New",monospace;padding:8px 12px;cursor:pointer}
     .tool:active{background:#191919}
@@ -55,7 +53,6 @@
     <div id="loading">CARICAMENTO BLITZ…</div>
     <div id="gate" aria-label="Avvia BLITZ">
       <div id="gateBox">
-        <button id="play" type="button">F1 · PLAY</button>
         <div id="authorTag">REMAKE SCRATCH · FLAVIO NARETTI</div>
       </div>
     </div>
@@ -104,7 +101,6 @@
     const projectEl = document.getElementById('project');
     const loading = document.getElementById('loading');
     const gate = document.getElementById('gate');
-    const play = document.getElementById('play');
     const restart = document.getElementById('restart');
     const fullscreen = document.getElementById('fullscreen');
     const about = document.getElementById('about');
